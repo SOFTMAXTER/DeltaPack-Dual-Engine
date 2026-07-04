@@ -1,0 +1,368 @@
+{
+  "schemaVersion": 1,
+  "description": "Matriz de exclusiones del motor DeltaPack Dual-Engine (filosofia Cero Ruido). Editar con cuidado: estas reglas determinan que se considera ruido del sistema vs. cambios reales de la aplicacion capturada.",
+  "registryExclusions": [
+    {
+      "category": "Win10/11 Background Noise",
+      "paths": [
+        "SOFTWARE\\Microsoft\\EnterpriseCertificates",
+        "SOFTWARE\\Microsoft\\SecurityManager",
+        "SOFTWARE\\Microsoft\\SystemCertificates",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateRepository",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ProfileService\\References",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WaaSAssessment",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Wosc",
+        "SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting",
+        "SOFTWARE\\WOW6432Node\\Microsoft\\SystemCertificates"
+      ]
+    },
+    {
+      "category": "CORE OS, EXPLORADOR Y CACHES",
+      "paths": [
+        "SOFTWARE\\Classes\\Local Settings",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Notifications",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Cached",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SideBySide"
+      ]
+    },
+    {
+      "category": "SEGURIDAD, ACTUALIZACIONES Y MANTENIMIENTO",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Cryptography\\RNG",
+        "SOFTWARE\\Microsoft\\Dfrg",
+        "SOFTWARE\\Microsoft\\Windows Defender",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\BITS",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\LanguageComponentsInstaller",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate",
+        "SOFTWARE\\Microsoft\\WindowsUpdate"
+      ]
+    },
+    {
+      "category": "SERVICIOS DEL SISTEMA Y EVENTOS",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Tracing",
+        "SOFTWARE\\Microsoft\\Wbem",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT",
+        "SYSTEM\\CurrentControlSet\\Control\\NetTrace",
+        "SYSTEM\\CurrentControlSet\\Control\\WMI",
+        "SYSTEM\\CurrentControlSet\\Services\\bam",
+        "SYSTEM\\CurrentControlSet\\Services\\VSS",
+        "SYSTEM\\CurrentControlSet\\Services\\W32Time"
+      ]
+    },
+    {
+      "category": "UI MODERNA, NUBE E IDENTIDAD",
+      "paths": [
+        "SOFTWARE\\Microsoft\\IdentityCRL",
+        "SOFTWARE\\Microsoft\\IdentityStore",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CloudStore",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Dsh",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OOBE",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\UFH"
+      ]
+    },
+    {
+      "category": "TELEMETRIA, DIAGNOSTICO E IA",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Prefetcher",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileService",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Diagnostics",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StorageSense",
+        "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+        "SYSTEM\\CurrentControlSet\\Services\\DiagTrack"
+      ]
+    },
+    {
+      "category": "CACHES PROFUNDAS, MRU Y RASTREO DE EJECUCION",
+      "paths": [
+        "SOFTWARE\\Classes\\Local Settings\\MuiCache",
+        "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Applets\\Regedit",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\MountPoints2",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\5.0\\Cache",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Extensible Cache",
+        "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache"
+      ]
+    },
+    {
+      "category": "MANTENIMIENTO .NET (NGen y Fusion Cache)",
+      "paths": [
+        "SOFTWARE\\Microsoft\\.NETFramework\\NGenQueue",
+        "SOFTWARE\\Microsoft\\.NETFramework\\v2.0.50727\\NGenService",
+        "SOFTWARE\\Microsoft\\.NETFramework\\v4.0.30319\\NGenService",
+        "SOFTWARE\\Microsoft\\Fusion\\NativeImagesIndex"
+      ]
+    },
+    {
+      "category": "FIREWALL Y SEGURIDAD BASE",
+      "paths": [
+        "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Epoch",
+        "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy",
+        "SYSTEM\\CurrentControlSet\\Services\\WinDefend"
+      ]
+    },
+    {
+      "category": "POLITICAS DE GRUPO",
+      "paths": [
+        "Group Policy\\PolicyApplicationState",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\ServiceInstances",
+        "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\ServiceInstances"
+      ]
+    },
+    {
+      "category": "MS STORE Y PROVISIONING",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Provisioning",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\InstallService"
+      ]
+    },
+    {
+      "category": "DIAGNOSTICO DE RENDIMIENTO",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Windows Performance Toolkit"
+      ]
+    },
+    {
+      "category": "VARIANTES DE 32-BITS (WOW6432Node)",
+      "paths": [
+        "SOFTWARE\\WOW6432Node\\Microsoft\\SecurityManager",
+        "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Group Policy"
+      ]
+    },
+    {
+      "category": "CENTRO DE SEGURIDAD Y MANTENIMIENTO",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Security Center",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Security and Maintenance"
+      ]
+    },
+    {
+      "category": "RUIDO DE REINICIO (BOOT, SHUTDOWN & PROFILES)",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppListBackup",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\GamingConfiguration",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\State",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Reliability",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SHUTDOWN",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Start",
+        "SOFTWARE\\Microsoft\\Windows\\Shell\\Bags"
+      ]
+    },
+    {
+      "category": "SERVICIOS POR USUARIO (Cambian de nombre en cada reinicio)",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\UserLogonTracing",
+        "SYSTEM\\CurrentControlSet\\Services\\AarSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\BcastDVRUserService_",
+        "SYSTEM\\CurrentControlSet\\Services\\BluetoothUserService_",
+        "SYSTEM\\CurrentControlSet\\Services\\CaptureService_",
+        "SYSTEM\\CurrentControlSet\\Services\\CBDhsvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\CDPUserSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\CloudBackupRestoreSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\ConsentUxUserSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\CredentialEnrollmentManagerUserSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\DeviceAssociationBrokerSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\DevicePickerUserSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\DevicesFlowUserSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\LxpSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\MessagingService_",
+        "SYSTEM\\CurrentControlSet\\Services\\NPSMSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\P9RdrService_",
+        "SYSTEM\\CurrentControlSet\\Services\\PenService_",
+        "SYSTEM\\CurrentControlSet\\Services\\PimIndexMaintenanceSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\PrintWorkflowUserSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\UdkUserSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\UnistoreSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\UserDataSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\webthreatdefusersvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\WpnUserService_"
+      ]
+    },
+    {
+      "category": "RED, TELEMETRIA, DIRECTX Y SINCRONIZACION DE HARDWARE",
+      "paths": [
+        "SOFTWARE\\Classes\\NotificationData",
+        "SOFTWARE\\Microsoft\\DirectX",
+        "SOFTWARE\\Microsoft\\EdgeUpdate",
+        "SOFTWARE\\Microsoft\\Security Center\\Svc\\Vol",
+        "SOFTWARE\\Microsoft\\Windows Media Foundation",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\HostActivityManager",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkList\\FirewallSync",
+        "SOFTWARE\\Microsoft\\Windows Script\\Settings\\Telemetry",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Fcon",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ThemeManager",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WSX\\WSXPacks",
+        "SOFTWARE\\Microsoft\\Windows\\Dwm",
+        "SOFTWARE\\Microsoft\\WindowsSelfHost",
+        "SOFTWARE\\WOW6432Node\\Microsoft\\EdgeUpdate",
+        "SYSTEM\\CurrentControlSet\\Services\\monitor\\State\\Wdf",
+        "SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Cache",
+        "SYSTEM\\CurrentControlSet\\Services\\OneSyncSvc_",
+        "SYSTEM\\CurrentControlSet\\Services\\srvnet\\Parameters"
+      ]
+    },
+    {
+      "category": "HARDWARE, BIOS Y RED DE ARRANQUE",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Windows Security Health",
+        "SYSTEM\\CurrentControlSet\\Services\\DsmSvc\\State",
+        "SYSTEM\\CurrentControlSet\\Services\\EventLog\\OAlerts",
+        "SYSTEM\\CurrentControlSet\\Services\\EventLog\\State",
+        "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
+        "SYSTEM\\CurrentControlSet\\Services\\mssmbios\\Data",
+        "SYSTEM\\CurrentControlSet\\Services\\vhdmp"
+      ]
+    },
+	{
+      "category": "RUIDO POST-INSTALACION WINDOWS",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateChange",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\COAWOS",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones",
+        "SOFTWARE\\WOW6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones",
+        "SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot",
+        "SOFTWARE\\Classes\\PackagedCom\\Package\\MaxInstallOrder",
+        "\\State\\Wdf",
+        "SYSTEM\\CurrentControlSet\\Services\\TrustedInstaller"
+      ]
+    }
+  ],
+  "fileExclusions": [
+    {
+      "category": "ARCHIVOS FISICOS DEL REGISTRO Y TRANSACCIONES",
+      "paths": [
+        "\\Windows\\System32\\config\\",
+        "\\Windows\\System32\\SMI\\Store\\Machine\\"
+      ]
+    },
+    {
+      "category": "RUIDO DEL SISTEMA OPERATIVO Y ACTUALIZACIONES",
+      "paths": [
+        "System Volume Information\\",
+        "\\ProgramData\\Microsoft\\Windows\\Caches\\",
+        "\\ProgramData\\Microsoft\\Windows\\DeviceMetadataCache\\",
+        "\\Windows\\assembly\\NativeImages_",
+        "\\Windows\\Prefetch\\",
+        "\\Windows\\ServiceProfiles\\",
+        "\\Windows\\SoftwareDistribution\\",
+        "\\Windows\\System32\\catroot2\\",
+        "\\Windows\\System32\\LogFiles\\",
+        "\\Windows\\System32\\wbem\\Repository\\"
+      ]
+    },
+    {
+      "category": "LICENCIAMIENTO, CRIPTOGRAFIA Y MANTENIMIENTO",
+      "paths": [
+        "\\ProgramData\\Microsoft\\Crypto\\",
+        "\\Windows\\System32\\spp\\",
+        "\\Windows\\System32\\Sysprep\\",
+        "\\Windows\\System32\\Tasks\\Microsoft\\Windows\\"
+      ]
+    },
+    {
+      "category": "TELEMETRIA Y REPORTES DE ERROR",
+      "paths": [
+        "\\AppData\\Local\\Microsoft\\Windows\\Safety\\Shell\\",
+        "\\ProgramData\\Microsoft\\Network\\Downloader\\",
+        "\\ProgramData\\Microsoft\\Windows Defender\\",
+        "\\ProgramData\\Microsoft\\Windows\\AppRepository\\",
+        "\\ProgramData\\Microsoft\\Windows\\Packages\\",
+        "\\ProgramData\\Microsoft\\Windows\\PowerGrid\\",
+        "\\ProgramData\\Microsoft\\Windows\\WER\\",
+        "\\ProgramData\\USOPrivate\\"
+      ]
+    },
+    {
+      "category": "CACHES DE USUARIO Y APLICACIONES MODERNAS (UWP)",
+      "paths": [
+        "\\AppData\\Local\\CrashDumps\\",
+        "\\AppData\\Local\\Google\\",
+        "\\AppData\\Local\\Microsoft\\Credentials\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\Caches\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\Explorer\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\History\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\PowerShell\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\SettingSync\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\WebCache\\",
+        "\\AppData\\Local\\Microsoft\\WindowsApps\\",
+        "\\AppData\\Local\\Packages\\",
+        "\\AppData\\Local\\Temp\\",
+        "\\Program Files\\WindowsApps\\",
+        "\\Program Files (x86)\\Microsoft\\EdgeUpdate\\",
+        "\\Program Files\\Microsoft\\EdgeUpdate\\",
+        "\\ProgramData\\Microsoft\\EdgeUpdate\\",
+        "\\Temp\\",
+        "\\Users\\Default\\AppData\\Local\\Temp\\",
+        "\\DeltaPack_Workspace\\"
+      ]
+    },
+    {
+      "category": "RUIDO DE REINICIO Y AUTENTICACION",
+      "paths": [
+        "\\AppData\\Local\\ConnectedDevicesPlatform\\",
+        "\\AppData\\Local\\Microsoft\\PenWorkspace\\",
+        "\\AppData\\Local\\Microsoft\\TokenBroker\\Cache\\",
+        "\\AppData\\Local\\Microsoft\\WindowsApps\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\Notifications\\",
+        "IconCache.db"
+      ]
+    },
+    {
+      "category": "CONTADORES DE RENDIMIENTO (PerfMon), WMI Y DIAGNOSTICO",
+      "paths": [
+        "\\ProgramData\\regid.1991-06.com.microsoft\\",
+        "\\Windows\\System32\\perfc",
+        "\\Windows\\System32\\perfh",
+        "\\Windows\\Prefetch",
+        "\\Windows\\System32\\PerfStringBackup.INI",
+        "\\Windows\\System32\\wbem\\Performance\\",
+        "\\Windows\\System32\\WDI\\LogFiles\\"
+      ]
+    },
+    {
+      "category": "EXCLUSIONES DE TERCEROS",
+      "paths": [
+        "\\ProgramData\\Veeam\\"
+      ]
+    },
+    {
+      "category": "EXTENSIONES RUIDOSAS UNIVERSALES",
+      "paths": [
+        ".bak",
+        ".blf",
+        ".db-wal",
+        ".dmp",
+        ".etl",
+        ".evtx",
+        ".jfm",
+        ".log",
+        ".regtrans-ms",
+        ".tmp",
+        "\\TxR\\",
+        "hiberfil.sys",
+        "pagefile.sys",
+        "swapfile.sys",
+        "UsrClass.dat",
+        "UsrClass.dat.LOG1",
+        "UsrClass.dat.LOG2"
+      ]
+    }
+  ]
+}
