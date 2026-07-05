@@ -1,7 +1,7 @@
 # DeltaPack Dual-Engine V1.0.0 by SOFTMAXTER
 
 <p align="center">
-  <img width="350" height="350" alt="DeltaPack Dual-Engine Logo" src="https://github.com/user-attachments/assets/eca22113-b9a7-41e3-a071-478737909fa9" />
+  <img width="250" height="250" alt="DeltaPack Dual-Engine Logo" src="https://github.com/user-attachments/assets/eca22113-b9a7-41e3-a071-478737909fa9" />
 </p>
 
 **DeltaPack Dual-Engine** es una suite avanzada de ingeniería inversa automatizada, diseñada para empaquetar aplicaciones en entornos Windows. Utilizando una metodología de captura diferencial (Snapshot), aísla el software de su instalador original y genera contenedores portables altamente optimizados para su inyección en imágenes offline.
