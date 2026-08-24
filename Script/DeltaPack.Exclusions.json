@@ -1,6 +1,54 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "description": "Matriz de exclusiones del motor DeltaPack Dual-Engine (filosofia Cero Ruido). Editar con cuidado: estas reglas determinan que se considera ruido del sistema vs. cambios reales de la aplicacion capturada.",
+  "captureSettings": {
+    "allowManagedRuntimeUpdates": false,
+    "allowAuditOnlyDeletions": false,
+    "includeBundledOneDrive": false,
+    "actionAwareInjector": false,
+    "fileScanMaxAttempts": 3,
+    "fileScanRetryDelayMs": 200,
+    "useVssScanFallback": true,
+    "additionalFileRoots": [],
+    "additionalRegistryTargets": [],
+    "notes": [
+      "Activa allowManagedRuntimeUpdates solo cuando Edge/WebView2 sea una dependencia intencional del instalador capturado.",
+      "EdgeWebView\\Application\\SetupMetrics se excluye siempre porque contiene telemetria de instalacion, no binarios necesarios del runtime.",
+      "allowAuditOnlyDeletions=false impide marcar como listo un paquete con tombstones accionables cuyo inyector no consume Deletions_*.json; filesystemAuditOnly y registryAuditOnly son evidencia y no bloquean por si solas.",
+      "includeBundledOneDrive=false separa OneDrive cuando Office u otro instalador lo actualiza incidentalmente; capturalo como paquete independiente o habilita la opcion de forma explicita.",
+      "actionAwareInjector=false mantiene packageReady=false cuando Actions_*.json schema 2 exige registrar catalogos o controladores offline. Habilitalo solo si el inyector consume el schema de acciones.",
+      "fileScanMaxAttempts y fileScanRetryDelayMs reintentan lecturas que cambian mientras se calcula SHA256; useVssScanFallback rescata desde una instantanea coherente del volumen.",
+      "additionalFileRoots acepta rutas absolutas y variables de entorno, por ejemplo %SystemDrive%\\Autodesk o D:\\Aplicaciones.",
+      "additionalRegistryTargets acepta objetos { hive: HKLM|HKCU, path: ruta, label: texto opcional }.",
+      "fileDeletionAuditRules clasifica eliminaciones ambientales conocidas como evidencia no destructiva; sus expresiones regulares se validan al iniciar.",
+      "registryDeletionAuditRules conserva como auditoria las eliminaciones de ramas protegidas del Registro, sin impedir que altas o modificaciones legitimas del instalador se capturen."
+    ]
+  },
+  "fileDeletionAuditRules": [
+    {
+      "category": "MANTENIMIENTO TRANSITORIO .NET",
+      "patterns": [
+        "^Windows\\\\Microsoft\\.NET\\\\Framework(?:64)?\\\\v[0-9.]+\\\\FXUpdate\\.dat$"
+      ],
+      "reason": "FXUpdate.dat es un marcador transitorio de mantenimiento de .NET y no debe convertirse en una eliminacion destructiva del paquete."
+    },
+    {
+      "category": "MARCADORES TRANSITORIOS DE CACHE DE USUARIO",
+      "patterns": [
+        "^Users\\\\Default\\\\AppData\\\\Local\\\\Microsoft\\\\Internet Explorer\\\\CacheStorage\\\\\\.inUse$"
+      ],
+      "reason": ".inUse es un marcador efimero de la cache de Internet Explorer; su desaparicion no pertenece al instalador capturado ni debe ejecutarse como tombstone."
+    }
+  ],
+  "registryDeletionAuditRules": [
+    {
+      "category": "PUBLICADORES DE EVENTOS DEL SISTEMA",
+      "paths": [
+        "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Publishers"
+      ],
+      "reason": "Durante una instalacion pueden rotar registros de proveedores ETW administrados por Windows o seguridad. Sus altas y modificaciones siguen capturandose, pero una desaparicion no correlacionada nunca debe convertirse en una eliminacion destructiva dentro del REG offline."
+    }
+  ],
   "registryExclusions": [
     {
       "category": "Win10/11 Background Noise",
@@ -8,7 +56,6 @@
         "SOFTWARE\\Microsoft\\EnterpriseCertificates",
         "SOFTWARE\\Microsoft\\SecurityManager",
         "SOFTWARE\\Microsoft\\SystemCertificates",
-        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache",
         "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateRepository",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx",
@@ -24,8 +71,8 @@
       "paths": [
         "SOFTWARE\\Classes\\Local Settings",
         "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Notifications",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Notifications",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing",
-        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Cached",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SideBySide"
       ]
@@ -48,7 +95,6 @@
       "paths": [
         "SOFTWARE\\Microsoft\\Tracing",
         "SOFTWARE\\Microsoft\\Wbem",
-        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT",
         "SYSTEM\\CurrentControlSet\\Control\\NetTrace",
         "SYSTEM\\CurrentControlSet\\Control\\WMI",
         "SYSTEM\\CurrentControlSet\\Services\\bam",
@@ -57,10 +103,32 @@
       ]
     },
     {
+      "category": "RUTAS PROTEGIDAS DE WINDOWS 11",
+      "paths": [
+        "SOFTWARE\\Microsoft\\EAPSIMMethods",
+        "SOFTWARE\\Microsoft\\WcmSvc\\wifinetworkmanager\\SharedProfiles",
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Superfetch",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\CloudExtensions",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Bluetooth",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SecondaryAuthFactor",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS",
+        "SOFTWARE\\Microsoft\\WwanSvc",
+        "SOFTWARE\\Policies\\Microsoft\\Windows Advanced Threat Protection",
+        "SYSTEM\\CurrentControlSet\\Services\\ADOVMPPackage\\Final",
+        "SYSTEM\\CurrentControlSet\\Services\\BTHPORT\\Parameters\\Keys",
+        "SYSTEM\\CurrentControlSet\\Services\\ExecutionContext\\Parameters\\Reserved",
+        "SYSTEM\\CurrentControlSet\\Services\\mpssvc\\Parameters\\AppCs",
+        "SYSTEM\\CurrentControlSet\\Services\\mpssvc\\Parameters\\PortKeywords",
+        "SYSTEM\\CurrentControlSet\\Services\\NDIS\\Parameters\\Reserved",
+        "SYSTEM\\CurrentControlSet\\Services\\PolicyAgent\\Parameters\\Cache"
+      ]
+    },
+    {
       "category": "UI MODERNA, NUBE E IDENTIDAD",
       "paths": [
         "SOFTWARE\\Microsoft\\IdentityCRL",
         "SOFTWARE\\Microsoft\\IdentityStore",
+        "SOFTWARE\\Microsoft\\LanguageOverlay\\UpdateFailures",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CloudStore",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Dsh",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OOBE",
@@ -88,10 +156,18 @@
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Applets\\Regedit",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\MountPoints2",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RestartCommands",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Streams",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StreamsMRU",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\WordWheelQuery",
+        "SOFTWARE\\Microsoft\\DirectDraw\\MostRecentApplication",
+        "SOFTWARE\\Microsoft\\RestartManager",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\5.0\\Cache",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Extensible Cache",
@@ -111,14 +187,13 @@
       "category": "FIREWALL Y SEGURIDAD BASE",
       "paths": [
         "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Epoch",
-        "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy",
         "SYSTEM\\CurrentControlSet\\Services\\WinDefend"
       ]
     },
     {
       "category": "POLITICAS DE GRUPO",
       "paths": [
-        "Group Policy\\PolicyApplicationState",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\PolicyApplicationState",
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\ServiceInstances",
         "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\ServiceInstances"
       ]
@@ -166,6 +241,27 @@
       ]
     },
     {
+      "category": "RUIDO DE SESION POST-REINICIO",
+      "paths": [
+        "SOFTWARE\\Classes\\AppUserModelId\\NotifyIconGeneratedAumid_",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModel\\StateRepositoryStatus",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CPSS\\SecurityApplied",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\SecurityApplied",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AllowTelemetry\\SecurityApplied",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Discardable",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SessionInfo",
+        "SOFTWARE\\Microsoft\\Windows\\Winlogon\\PasswordExpiryNotification"
+      ]
+    },
+    {
+      "category": "ESTADO VOLATIL POST-REINICIO (USUARIO Y CACHES DE RECURSOS)",
+      "paths": [
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppReadiness",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Package Installation",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Mrt\\_Merged"
+      ]
+    },
+    {
       "category": "SERVICIOS POR USUARIO (Cambian de nombre en cada reinicio)",
       "paths": [
         "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\UserLogonTracing",
@@ -202,7 +298,6 @@
         "SOFTWARE\\Microsoft\\DirectX",
         "SOFTWARE\\Microsoft\\EdgeUpdate",
         "SOFTWARE\\Microsoft\\Security Center\\Svc\\Vol",
-        "SOFTWARE\\Microsoft\\Windows Media Foundation",
         "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\HostActivityManager",
         "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkList\\FirewallSync",
         "SOFTWARE\\Microsoft\\Windows Script\\Settings\\Telemetry",
@@ -244,6 +339,114 @@
       ]
     }
   ],
+  "registryValueExclusions": [
+    {
+      "category": "IMPRESORAS VIRTUALES - IDENTIDAD DEL EQUIPO",
+      "rules": [
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "uNCName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "serverName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "shortServerName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "uNCName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "serverName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "shortServerName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "uNCName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "serverName"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Print\\Printers\\OneNote (Desktop)\\DsSpooler",
+          "valueName": "shortServerName"
+        }
+      ]
+    },
+    {
+      "category": "TAREAS PROGRAMADAS - METADATOS VOLATILES",
+      "rules": [
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks",
+          "valueName": "DynamicInfo"
+        }
+      ]
+    },
+    {
+      "category": "SERVICIOS WINDOWS - CONFIGURACION TRANSITORIA",
+      "rules": [
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\BITS",
+          "valueName": "Start"
+        }
+      ]
+    },
+    {
+      "category": "EXPLORADOR - CONTADORES DE SESION",
+      "rules": [
+        {
+          "pathPrefix": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "valueName": "DesktopReadyTimeout"
+        },
+        {
+          "pathPrefix": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "valueName": "LogonCount"
+        },
+        {
+          "pathPrefix": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "TaskbarStateLastRun"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "valueName": "GlobalAssocChangedCounter"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "valueName": "GlobalAssocChangedCounter"
+        }
+      ]
+    },
+    {
+      "category": "INSTALADORES Y SERVICIOS - ESTADO EFIMERO",
+      "rules": [
+        {
+          "pathPrefix": "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION",
+          "valueName": "Set-up.exe"
+        },
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Epoch2",
+          "valueName": "Epoch"
+        }
+      ]
+    },
+    {
+      "category": "DIAGNOSTICO DE DISCO - CONTADOR VOLATIL",
+      "rules": [
+        {
+          "pathPrefix": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\DiskDiagnostics",
+          "valueName": "DFDCollectorInvokeTimes"
+        }
+      ]
+    }
+  ],
   "fileExclusions": [
     {
       "category": "ARCHIVOS FISICOS DEL REGISTRO Y TRANSACCIONES",
@@ -255,6 +458,8 @@
     {
       "category": "RUIDO DEL SISTEMA OPERATIVO Y ACTUALIZACIONES",
       "paths": [
+        "\\$Recycle.Bin\\",
+        "\\Config.Msi\\",
         "System Volume Information\\",
         "\\ProgramData\\Microsoft\\Windows\\Caches\\",
         "\\ProgramData\\Microsoft\\Windows\\DeviceMetadataCache\\",
@@ -279,22 +484,42 @@
     {
       "category": "TELEMETRIA Y REPORTES DE ERROR",
       "paths": [
+        "\\Program Files\\Windows Defender Advanced Threat Protection\\",
+        "\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\",
         "\\AppData\\Local\\Microsoft\\Windows\\Safety\\Shell\\",
+        "\\AppData\\Local\\Microsoft\\Windows\\WebCacheLock.dat",
         "\\ProgramData\\Microsoft\\Network\\Downloader\\",
+        "\\ProgramData\\Microsoft\\Windows\\CapabilityAccessManager\\",
+        "\\ProgramData\\Microsoft\\Windows\\SystemData\\",
         "\\ProgramData\\Microsoft\\Windows Defender\\",
         "\\ProgramData\\Microsoft\\Windows\\AppRepository\\",
         "\\ProgramData\\Microsoft\\Windows\\Packages\\",
         "\\ProgramData\\Microsoft\\Windows\\PowerGrid\\",
         "\\ProgramData\\Microsoft\\Windows\\WER\\",
+        "\\ProgramData\\Whesvc\\pool_tags_summary\\",
+        "\\Program Files\\Microsoft\\EdgeWebView\\Application\\SetupMetrics\\",
+        "\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\SetupMetrics\\",
         "\\ProgramData\\USOPrivate\\"
+      ]
+    },
+    {
+      "category": "CACHE PROTEGIDA DE PAQUETES Y SEGURIDAD",
+      "paths": [
+        "\\ProgramData\\Packages\\",
+        "\\Windows\\System32\\Microsoft\\Protect\\Recovery\\",
+        "\\Windows\\System32\\WebThreatDefSvc\\"
       ]
     },
     {
       "category": "CACHES DE USUARIO Y APLICACIONES MODERNAS (UWP)",
       "paths": [
+        "\\AppData\\Local\\Adobe\\OOBE\\",
         "\\AppData\\Local\\CrashDumps\\",
+        "\\AppData\\Local\\D3DSCache\\",
         "\\AppData\\Local\\Google\\",
         "\\AppData\\Local\\Microsoft\\Credentials\\",
+        "\\AppData\\Local\\Microsoft\\Internet Explorer\\",
+        "\\AppData\\Local\\Microsoft\\Office\\OTele\\",
         "\\AppData\\Local\\Microsoft\\Windows\\Caches\\",
         "\\AppData\\Local\\Microsoft\\Windows\\Explorer\\",
         "\\AppData\\Local\\Microsoft\\Windows\\History\\",
@@ -304,6 +529,7 @@
         "\\AppData\\Local\\Microsoft\\WindowsApps\\",
         "\\AppData\\Local\\Packages\\",
         "\\AppData\\Local\\Temp\\",
+        "\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\",
         "\\Program Files\\WindowsApps\\",
         "\\Program Files (x86)\\Microsoft\\EdgeUpdate\\",
         "\\Program Files\\Microsoft\\EdgeUpdate\\",
@@ -317,10 +543,13 @@
       "category": "RUIDO DE REINICIO Y AUTENTICACION",
       "paths": [
         "\\AppData\\Local\\ConnectedDevicesPlatform\\",
+        "\\AppData\\Local\\Microsoft\\GameDVR\\",
+        "\\AppData\\Local\\Microsoft\\CLR_v4.0\\",
         "\\AppData\\Local\\Microsoft\\PenWorkspace\\",
         "\\AppData\\Local\\Microsoft\\TokenBroker\\Cache\\",
-        "\\AppData\\Local\\Microsoft\\WindowsApps\\",
         "\\AppData\\Local\\Microsoft\\Windows\\Notifications\\",
+        "\\Windows\\System32\\5E37410B-D6F1-471D-AE27-563CEAC0D6B2",
+        "bootTel.dat",
         "IconCache.db"
       ]
     },
