@@ -1,10 +1,10 @@
-# DeltaPack Dual-Engine V1.0.0 by SOFTMAXTER
+# DeltaPack Dual-Engine V1.1.0 by SOFTMAXTER
 
 <p align="center">
-  <img width="250" height="250" alt="DeltaPack Dual-Engine Logo" src="https://github.com/user-attachments/assets/eca22113-b9a7-41e3-a071-478737909fa9" />
+  <img width="230" height="250" alt="DeltaPack Dual-Engine Logo" src="https://github.com/user-attachments/assets/eca22113-b9a7-41e3-a071-478737909fa9" />
 </p>
 
-**DeltaPack Dual-Engine** es una suite avanzada de ingeniería inversa automatizada, diseñada para empaquetar aplicaciones en entornos Windows. Utilizando una metodología de captura diferencial (Snapshot), aísla el software de su instalador original y genera contenedores portables altamente optimizados para su inyección en imágenes offline.
+**DeltaPack Dual-Engine** es una suite de ingeniería inversa automatizada, diseñada para empaquetar aplicaciones en entornos Windows. Utilizando una metodología de captura diferencial (Snapshot), aísla el software de su instalador original y genera contenedores portables altamente optimizados para su inyección en imágenes offline.
 
 ## Filosofía de la Herramienta: "Cero Ruido"
 
@@ -14,38 +14,33 @@ DeltaPack actúa como un **filtro purificador de grado forense**. Su matriz de e
 
 ## Características Principales
 
-* **Captura Diferencial Completa:** Compara el estado inicial y final del sistema para detectar archivos nuevos, archivos modificados, claves de registro nuevas o modificadas y elementos eliminados por el instalador.
-* **Matriz "Cero Ruido" Externalizada:** Usa `DeltaPack.Exclusions.json` como fuente central de exclusiones de archivos y registro, incluyendo ruido típico de Windows 10/11, telemetría, cachés, servicios por usuario, actualizaciones, componentes modernos y ruido post-instalación.
-* **Soporte WIM Estándar:** Generación de contenedores `.wim` compatibles con DISM y flujos de despliegue offline, con compresión máxima y uso de espacio temporal aislado.
-* **Saneamiento de Perfil (Portabilidad Absoluta):** Detecta rutas atadas al usuario de captura y las redirige a `Users\Default`, asegurando que el despliegue sea universal sin importar la cuenta de destino.
-* **Registro Portable:** Genera un `.reg` saneado, listo para importarse después de desplegar el `.wim`, preservando valores relevantes y documentando eliminaciones cuando corresponda.
-* **Cobertura Avanzada de Registro:** Captura áreas críticas de software, servicios, COM y asociaciones del sistema, necesarias para muchas aplicaciones de escritorio.
-* **Soporte Completo de Tipos de Datos de Registro:** Exporta correctamente valores `DWORD`, `QWORD`, `SZ`, `ExpandString`, `Binary` y `MultiString`, evitando corrupciones al importar el `.reg` resultante.
-* **Resiliencia ante Reinicios (Auto-Reanudación):** Si el instalador requiere reiniciar el equipo, DeltaPack guarda el estado base y permite continuar la captura al volver a Windows.
-* **Soporte VSS Integrado:** Puede rescatar archivos bloqueados o en uso durante la captura mediante instantáneas de volumen, limpiando la instantánea al finalizar.
-* **Modo Dry Run / Vista Previa:** Permite calcular y auditar los cambios detectados sin copiar archivos ni crear el `.wim`, ideal para validar ruido antes de generar el paquete final.
-* **Auditoría Automática:** Genera un reporte Markdown con resumen estadístico, manifiesto de archivos, métricas de escaneo, diagnóstico automático, archivos eliminados y notas técnicas de despliegue.
-* **Manifest JSON:** Crea un `manifest_[Nombre].json` con información estructurada del paquete, métricas, salidas generadas, diagnóstico del escaneo y banderas de ejecución.
-* **Integridad SHA256:** Genera un manifiesto de checksums para verificar los archivos extraídos del paquete.
-* **Diagnóstico de Escaneo:** Reporta estado del escaneo, cobertura de verificación, omisiones por exclusión, acceso denegado, reparse points, errores I/O y tiempo total de análisis.
-* **Adaptabilidad de Arquitectura:** Detecta automáticamente la arquitectura del sistema (`x64`, `x86` o `arm64`) y la incorpora al nombre final del paquete.
-* **Validaciones de Entrada:** Rechaza caracteres no válidos en el nombre del paquete y en el sufijo antes de iniciar la captura.
-* **Verificaciones Previas del Entorno:** Antes de ejecutarse, valida PowerShell 5.1+, privilegios de Administrador y disponibilidad de `dism.exe`.
-* **Soporte de Rutas Largas:** Habilita la compatibilidad con rutas largas de Windows para reducir fallos de indexación y empaquetado.
-* **Control de Espacio:** Antes de crear el `.wim`, valida espacio disponible para el destino y el directorio temporal de trabajo.
-
+* **Captura Diferencial Completa:** Compara el estado inicial y final del sistema (archivos, registro y eliminaciones) para aislar únicamente lo que el instalador cambió.
+* **Matriz "Cero Ruido" Externalizada:** `DeltaPack.Exclusions.json` centraliza las exclusiones de archivos, registro y ruido típico de Windows 10/11.
+* **Soporte WIM Estándar:** Genera `.wim` compatibles con DISM, con compresión máxima y progreso supervisado (tiempo/tamaño en vez de una barra congelada en 0%).
+* **Registro y Perfil Portables:** Exporta un `.reg` saneado, redirige rutas atadas al usuario de captura a `Users\Default` y reemplaza la ACL ligada a su SID.
+* **Resiliencia ante Reinicios:** Auto-reanudación endurecida vía `RunOnce`, con verificación exacta de identidad (PS1, motor C#, exclusiones y snapshot) antes de continuar.
+* **Identidad Canónica e Integridad SHA256:** Nombre, arquitectura y tipo generan una identidad inmutable; el motor y todos los artefactos se re-verifican en cada etapa y ante cualquier discrepancia se bloquea la publicación.
+* **Reparse Points Reproducibles:** Lee y recrea junctions/symlinks vía `FSCTL_GET/SET_REPARSE_POINT`, verificando su huella antes del WIM.
+* **Tombstones y Acciones Offline:** `Deletions_*.json` y `Actions_*.json` (JSON transaccional y validado) documentan eliminaciones y pasos especializados (drivers, catálogos, tareas) para el inyector.
+* **Auditoría Automática:** Reporte Markdown, `manifest_*.json` estructurado y checksums SHA256 por capas (payload y artefactos), incluso en Dry Run.
+* **Bloqueos Fail-Closed:** Protege ante mantenimiento del sistema base, migraciones masivas de Edge/WebView2 y brechas de registro no estables; nunca empaqueta un delta contaminado.
+* **Modo Dry Run:** Calcula y audita cambios sin copiar archivos ni generar `.wim`.
+* **Verificaciones de Entorno:** Valida PowerShell 5.1+, elevación, `dism.exe`, privilegios de captura, espacio en disco y arquitectura (`x64`/`x86`/`arm64`) antes de empezar.
 ## Modo de Uso y Estructura
 
-1. Descarga el repositorio como un archivo `.zip` y extráelo en una ruta corta, por ejemplo: `C:\DeltaPackDual`.
+1. Descarga el archivo `.zip` y extráelo en una ruta corta, por ejemplo `C:\DeltaPackDual`.
 2. Mantén la estructura de directorios completa. No muevas ni renombres los archivos internos de la suite:
 
    ```text
    TuCarpetaPrincipal/
    │   DeltaPackDual-Engine.exe
+   │   README.md
+   │   LICENSE
    ├───Script/
        │   DeltaPackDual-Engine.ps1
        │   DiffEngine.cs
        │   DeltaPack.Exclusions.json
+       │   Validate-DeltaPackPackage.ps1
    ```
 
 3. Haz doble clic en **`DeltaPackDual-Engine.exe`**. El lanzador solicitará permisos de Administrador y preparará el entorno de ejecución de manera automática.
@@ -56,34 +51,55 @@ Para garantizar que los paquetes generados sean universales y no contengan depen
 
 Se debe utilizar una instalación base de Windows 10 22H2 o superior, preferentemente sin conexión a internet durante la captura, con las librerías necesarias ya instaladas previamente (Visual C++ Redistributables, .NET Framework, runtimes requeridos, etc.). Lo ideal es trabajar en una máquina virtual con soporte para Snapshots, de modo que puedas revertir la máquina a su estado original después de empaquetar cada aplicación.
 
+Desactiva Windows Update y Windows Defender (o excluye la ruta de trabajo en Defender) antes de iniciar la captura. Ambos pueden tocar rutas protegidas (`CatRoot`, firma de drivers) o poner en cuarentena archivos del instalador durante la ventana de captura, disparando el bloqueo fail-closed o contaminando el delta con ruido no atribuible a la aplicación.
+
+Usa la misma cuenta local con privilegios de Administrador antes y después de un reinicio. La reanudación automática (`HKCU\RunOnce`) solo funciona si vuelve a iniciar sesión el mismo usuario. Si otra persona inicia sesión con una cuenta de administrador distinta para continuar, la captura se reanudará en el perfil de esa otra cuenta, no en el original.
+
+### Ajustes para Instaladores Complejos
+
+`Script\DeltaPack.Exclusions.json` contiene un bloque opcional `captureSettings`:
+
+* `additionalFileRoots`: agrega rutas absolutas que el instalador usa fuera del alcance estándar, por ejemplo `%SystemDrive%\Autodesk` o `D:\Aplicaciones`.
+* `additionalRegistryTargets`: agrega objetivos `HKLM`/`HKCU` mediante objetos `{ "hive": "HKLM", "path": "...", "label": "..." }`.
+* `allowManagedRuntimeUpdates`: actívalo únicamente cuando el instalador deba incluir intencionalmente Edge/WebView2. Por defecto una migración masiva sigue siendo bloqueante.
+* `allowAuditOnlyDeletions`: por defecto es `false`. Solo debe activarse cuando se acepta deliberadamente que el inyector no aplique las entradas accionables de `Deletions_*.json`. La evidencia `filesystemAuditOnly` y `registryAuditOnly` nunca requiere activar esta opción.
+* `includeBundledOneDrive`: por defecto es `false`; separa OneDrive cuando Office u otro instalador lo actualiza incidentalmente. Actívalo únicamente si OneDrive forma parte intencional del paquete.
+* `actionAwareInjector`: por defecto es `false`. Actívalo únicamente cuando el inyector pueda consumir `Actions_*.json` schema 2; de lo contrario el WIM puede generarse, pero `packageReady` permanece en `false` si hay catálogos/controladores especializados.
+* `fileScanMaxAttempts`: número de intentos de lectura directa antes del rescate; el valor predeterminado es `3`.
+* `fileScanRetryDelayMs`: espera incremental entre intentos; el valor predeterminado es `200` ms.
+* `useVssScanFallback`: por defecto es `true`. Permite verificar desde VSS cualquier archivo del volumen del sistema que siga inestable después de los reintentos.
+
 ---
 
 ## Guía de Uso: Creación del Paquete (Packager)
 
 El proceso de creación está diseñado como un asistente interactivo y seguro:
 
-1. Ejecuta el lanzador **`DeltaPackDual-Engine.exe`**. El sistema validará automáticamente privilegios de Administrador y preparará el entorno.
+1. Ejecuta el lanzador **`DeltaPackDual-Engine.exe`**. El sistema validará la elevación y los privilegios de backup, restauración y creación de enlaces antes de preparar una Captura Completa. Si el token no los contiene, se detiene antes del snapshot o del Staging.
 2. Ingresa el nombre base del paquete, por ejemplo: `WinRAR`, `Office_24`, `MiApp`.
 3. Selecciona la categoría:
    * **Paquete Principal:** usa el sufijo `_main`.
    * **Complemento / Idioma / Update:** permite definir un sufijo personalizado.
 4. Selecciona el modo de ejecución:
    * **Captura Completa:** genera `.wim`, `.reg`, reporte, manifest y checksums.
-   * **Dry Run / Vista Previa:** solo calcula y reporta los cambios detectados; no copia archivos ni genera `.wim`.
-5. **Fase 1 (Mapeo Base):** DeltaPack tomará una fotografía inicial del sistema.
+   * **Dry Run / Vista Previa:** solo calcula y reporta los cambios detectados; no copia archivos ni genera `.wim`. Si la cobertura es íntegra, finaliza como vista previa completada aunque `packageReady` permanezca en `false` por diseño.
+5. **Fase 1 (Mapeo Base):** DeltaPack tomará una fotografía inicial del sistema. Si alguna ruta continúa ilegible después de reintentos y VSS, se detendrá aquí y conservará el log; no instales la aplicación hasta reparar o restaurar la base.
 6. **Pausa de Instalación:** instala tu software, inícialo, aplica licencias y configuraciones. **Cierra el programa por completo** al terminar.
 7. Si el instalador pide reiniciar, reinicia con tranquilidad. DeltaPack podrá continuar la captura al volver a Windows.
 8. **Fase Final:** presiona Enter en la consola. DeltaPack calculará los cambios, aplicará exclusiones, rescatará archivos necesarios, redirigirá perfiles de usuario y generará los artefactos finales.
 
 ### Estructura de Salida
 
-En tu escritorio se creará automáticamente la carpeta `DeltaPack_[Nombre_Del_Paquete]` conteniendo:
+En tu escritorio se creará automáticamente la carpeta `DeltaPack_[Nombre_Del_Paquete]`. Si ya existe, se conservará y la nueva salida recibirá una marca de tiempo.
 
 * `[Nombre].wim` — contenedor con los binarios purificados. No se genera en Dry Run.
 * `[Nombre].reg` — registro saneado con redirecciones universales.
+* `Deletions_[Nombre].json` — schema 2 con tombstones accionables y evidencia no destructiva. `filesystemAuditOnlyEntryCount`, `registryAuditOnlyEntryCount`, `actionableEntryCount` y `applyPolicy` distinguen cada caso.
+* `Actions_[Nombre].json` — acciones y validaciones offline para controladores, catálogos, tareas y reparse points; aparece cuando hay evidencia aplicable.
 * `README_[Nombre].md` — reporte forense, estadístico y manifiesto de archivos.
 * `manifest_[Nombre].json` — manifiesto estructurado de la captura.
-* `Checksums_[Nombre].sha256` — manifiesto de integridad de archivos. No se genera en Dry Run.
+* `Checksums_[Nombre].sha256` — manifiesto de integridad del payload copiado al WIM. No se genera en Dry Run porque no existe Staging de archivos.
+* `Artifacts_[Nombre].sha256` — índice de integridad de los artefactos generados (`REG`, `Actions`, reporte y manifest; también WIM/checksums cuando existen). Se genera también en Dry Run, pero nunca si falta un JSON obligatorio o alguno no supera la validación.
 * `Install_Log.txt` — traza completa del proceso con niveles de severidad.
 * `dism.log` — log de captura WIM cuando aplica.
 
@@ -98,15 +114,33 @@ El reporte `README_[Nombre].md` incluye:
 * archivos o carpetas eliminados por el instalador;
 * métricas internas de escaneo;
 * diagnóstico automático del estado de la captura;
+* estado de integridad del sistema base (bloqueo fail-closed si hubo mantenimiento de Windows durante la captura);
 * manifiesto completo de archivos incluidos o detectados en Dry Run;
 * notas técnicas de inyección.
 
 ### Notas importantes de empaquetado
 
-* Inyecta primero el `.wim` y después importa el `.reg`.
-* Los elementos eliminados por el instalador se documentan, pero no se incluyen en el `.wim`.
+* El orden es: despliega `.wim`, ejecuta `Actions_*.json` en fase `afterWimBeforeRegistry`, aplica únicamente las entradas accionables de `Deletions_*.json`, importa `.reg` y ejecuta las validaciones `afterRegistry`. `filesystemAuditOnly` y `registryAuditOnly` no se ejecutan.
+* Los elementos eliminados no caben dentro de un WIM aditivo. El paquete no se marca listo si el inyector debe aplicarlos y no se autorizó el modo de auditoría.
 * Si el diagnóstico marca advertencias, revisa el `manifest_[Nombre].json` y `Install_Log.txt` antes de usar el paquete como base final.
 * Si trabajas en Dry Run, vuelve a ejecutar en Captura Completa para generar el `.wim`.
+* En el manifest, usa `scanCoverageComplete`, `staging.status`, `stagingComplete`, `captureIntegrityStatus`, `wimCreated` y `packageReady` como estados distintos. En Dry Run, Staging e integridad de captura figuran como `notApplicable` y nunca se presentan como completados.
+
+## Seguridad y Límites Conocidos
+
+* Ejecuta DeltaPack únicamente en una VM limpia y desconectada de internet durante la captura. El proceso requiere elevación y observa áreas sensibles del sistema.
+* El launcher incluido no tiene firma Authenticode. Descárgalo únicamente de una fuente confiable antes de elevarlo y no reemplaces archivos dentro de `Script\`.
+* `HKCR` no se captura como vista combinada: las clases globales y por usuario se registran por separado desde `HKLM\SOFTWARE\Classes` y `HKCU\Software\Classes`.
+* `-ExecutionPolicy Bypass` no valida la integridad del script; por eso una distribución controlada del `.zip` sigue siendo necesaria.
+* El motor no realiza conexiones de red ni descarga componentes. Los enlaces del README son solo documentación.
+* Se conservan contenido, timestamps, atributos y ACL cuando Windows lo permite. No se garantiza la reproducción de Alternate Data Streams, EFS, enlaces físicos ni todos los metadatos especiales de NTFS.
+* El rescate VSS opera sobre el volumen del sistema. Un archivo bloqueado dentro de una raíz adicional ubicada en otro volumen detendrá la captura para no producir un paquete incompleto.
+* Los reparse points fuera del perfil capturador se reproducen desde su descriptor NTFS. Los ubicados dentro del perfil no se trasladan automáticamente a `Users\Default`, porque hacerlo podría cambiar el destino o la seguridad del enlace.
+* Las ACL y timestamps del objeto enlace se heredan de Staging para evitar que las APIs de alto nivel sigan el destino; el descriptor, tag y buffer NTFS sí se conservan y verifican exactamente.
+* Las rutas almacenadas dentro de valores binarios de Registro no pueden sanearse de forma universal.
+* Las rutas absolutas usadas como nombres de valores de Registro no admiten variables de entorno. El manifest registra `requiresSameSystemDrive=true` cuando el destino debe conservar la misma letra de sistema.
+* No captures activaciones, tokens, certificados privados ni secretos ligados a la VM. El licenciamiento debe ejecutarse en el equipo destino según el contrato del fabricante.
+* El workspace vigente está en `%ProgramData%\DeltaPack\Captures`. Cada captura guarda SHA256 separados del PS1, motor C# y exclusiones. La reanudación exige coincidencia exacta de esos componentes y del formato binario; si alguno cambia, la captura guardada se rechaza y debe iniciarse otra desde cero.
 
 ---
 
@@ -132,8 +166,9 @@ A continuación, se detallan los pasos exactos para inyectar permanentemente tu 
 4. **Carga de Archivos:**
    * Haz clic en **"+ Agregar Addons..."**.
    * Selecciona ambos archivos generados por DeltaPack: `tu_app.wim` y `tu_app.reg`.
+   * Si existe `Actions_tu_app.json`, confirma soporte del schema 2 y respeta sus fases. Si `Deletions_tu_app.json` schema 2 declara `requiresDeletionAwareInjector=true`, confirma que el inyector pueda aplicar sus `entries`. `filesystemAuditOnly` y `registryAuditOnly` son evidencia y no se ejecutan.
 5. **Filtro de Arquitectura:** Selecciona la arquitectura de destino de tu imagen (`x86`, `x64` o `arm64`, según corresponda).
-6. **Ejecución:** Haz clic en **"INYECTAR TODOS LOS ADDONS"**. Primero se desplegarán los binarios y después se fusionará el registro.
+6. **Ejecución:** Haz clic en **"INYECTAR TODOS LOS ADDONS"**. El orden requerido es WIM, acciones previas, tombstones, REG y validaciones posteriores.
 7. **Guardado (Commit):**
    * Cierra el módulo gráfico y regresa al Menú de Gestión de Imagen.
    * Selecciona **[3] Guardar y Desmontar Imagen (Commit)** para sellar permanentemente la aplicación dentro de la imagen maestra de Windows.
@@ -184,3 +219,4 @@ Distribuido bajo la **Licencia GNU GPLv3**. Eres libre de usar, modificar y comp
 Si deseas integrar el motor de DeltaPack en un producto comercial propietario (closed-source), o requieres Acuerdos de Nivel de Servicio (SLA) para tu corporación, **debes adquirir una Licencia Comercial**.
 
 Para mayor información o consultas de licenciamiento empresarial, contactar mediante correo electrónico a: `softmaxter@hotmail.com`
+ mayor información o consultas de licenciamiento empresarial, contactar mediante correo electrónico a: `softmaxter@hotmail.com`
