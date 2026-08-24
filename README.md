@@ -40,7 +40,6 @@ DeltaPack actúa como un **filtro purificador de grado forense**. Su matriz de e
        │   DeltaPackDual-Engine.ps1
        │   DiffEngine.cs
        │   DeltaPack.Exclusions.json
-       │   Validate-DeltaPackPackage.ps1
    ```
 
 3. Haz doble clic en **`DeltaPackDual-Engine.exe`**. El lanzador solicitará permisos de Administrador y preparará el entorno de ejecución de manera automática.
