@@ -5,7 +5,7 @@
     "allowManagedRuntimeUpdates": false,
     "allowAuditOnlyDeletions": false,
     "includeBundledOneDrive": false,
-    "actionAwareInjector": false,
+    "actionAwareInjector": true,
     "fileScanMaxAttempts": 3,
     "fileScanRetryDelayMs": 200,
     "useVssScanFallback": true,
@@ -16,7 +16,6 @@
       "EdgeWebView\\Application\\SetupMetrics se excluye siempre porque contiene telemetria de instalacion, no binarios necesarios del runtime.",
       "allowAuditOnlyDeletions=false impide marcar como listo un paquete con tombstones accionables cuyo inyector no consume Deletions_*.json; filesystemAuditOnly y registryAuditOnly son evidencia y no bloquean por si solas.",
       "includeBundledOneDrive=false separa OneDrive cuando Office u otro instalador lo actualiza incidentalmente; capturalo como paquete independiente o habilita la opcion de forma explicita.",
-      "actionAwareInjector=false mantiene packageReady=false cuando Actions_*.json schema 2 exige registrar catalogos o controladores offline. Habilitalo solo si el inyector consume el schema de acciones.",
       "fileScanMaxAttempts y fileScanRetryDelayMs reintentan lecturas que cambian mientras se calcula SHA256; useVssScanFallback rescata desde una instantanea coherente del volumen.",
       "additionalFileRoots acepta rutas absolutas y variables de entorno, por ejemplo %SystemDrive%\\Autodesk o D:\\Aplicaciones.",
       "additionalRegistryTargets acepta objetos { hive: HKLM|HKCU, path: ruta, label: texto opcional }.",
@@ -462,6 +461,7 @@
         "\\Config.Msi\\",
         "System Volume Information\\",
         "\\ProgramData\\Microsoft\\Windows\\Caches\\",
+		"\\ProgramData\\USOShared\\",
         "\\ProgramData\\Microsoft\\Windows\\DeviceMetadataCache\\",
         "\\Windows\\assembly\\NativeImages_",
         "\\Windows\\Prefetch\\",
@@ -470,6 +470,16 @@
         "\\Windows\\System32\\catroot2\\",
         "\\Windows\\System32\\LogFiles\\",
         "\\Windows\\System32\\wbem\\Repository\\"
+      ]
+    },
+    {
+      "category": "SERVICING COMPARTIDO Y GAC (.NET Framework / CBS)",
+      "paths": [
+        "\\ProgramData\\Microsoft\\NetFramework\\BreadcrumbStore\\",
+        "\\Windows\\WinSxS\\",
+        "\\Windows\\servicing\\",
+        "\\Windows\\System32\\catroot\\",
+        "\\Windows\\assembly\\"
       ]
     },
     {

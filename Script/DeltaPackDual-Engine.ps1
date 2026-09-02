@@ -589,7 +589,7 @@ function Invoke-DeltaPackWimCapture {
             $status = "En curso | Tiempo: $elapsedLabel | $currentOperation"
 
             Write-Progress -Activity 'Generando paquete WIM (actividad comprobable)' `
-                -Status $status -CurrentOperation 'El porcentaje nativo no es fiable; no se muestra un 0% ficticio.' `
+                -Status $status -CurrentOperation 'El porcentaje nativo no es fiable.' `
                 -PercentComplete -1
 
             $nowUtc = [DateTime]::UtcNow
@@ -3538,7 +3538,7 @@ if ($captureComplete -and (($fileCount -gt 0) -or ($directoryCount -gt 0))) {
             $descMeta = "App: $($script:DeltaPackPackageBaseName) | Modulo: $($script:DeltaPackPackageType) | Arch: $($script:DeltaPackPackageArchitecture) | SO Captura: $osVersion | Fecha: $dateStr"
 
             Write-Log "Comprimiendo contenedor (Max Compression) usando Scratch exclusivo en $scratchDir..." -Level INFO
-            Write-Host "`nIniciando captura WIM. Se mostrara actividad, tiempo y tamano escrito sin un porcentaje ficticio..." -ForegroundColor Yellow
+            Write-Host "`nIniciando captura WIM. Se mostrara actividad, tiempo y tamano escrito..." -ForegroundColor Yellow
 
             $wimCaptureMetrics = Invoke-DeltaPackWimCapture `
                 -ImagePath $wimOutputFile `
@@ -4241,7 +4241,7 @@ $reportBannerBlock
 | $sizeMetricLabel | $sizeDisplay |
 | Tamaño Comprimido del Contenedor WIM | $(if ($null -ne $wimCaptureMetrics) { Format-ByteSize -Bytes ([int64]$wimCaptureMetrics.finalSizeBytes) } else { "No aplica" }) |
 | Tiempo de Captura y Verificación WIM | $(if ($null -ne $wimCaptureMetrics) { [string]$wimCaptureMetrics.elapsed } else { "No aplica" }) |
-| Monitor de Progreso WIM | $(if ($null -ne $wimCaptureMetrics) { "Actividad indeterminada con tiempo/tamaño; sin 0% ficticio" } else { "No aplica" }) |
+| Monitor de Progreso WIM | $(if ($null -ne $wimCaptureMetrics) { "Actividad indeterminada con tiempo/tamaño" } else { "No aplica" }) |
 | Claves de Registro Agregadas/Modificadas (.reg) | $regKeysCount |
 | Valores de Registro Agregados/Modificados | $regValuesCount |
 | Claves de Registro Eliminadas (.reg) | $regKeysDeleted |
@@ -4381,7 +4381,7 @@ $mdNotasTecnicas = @"
 * El paquete incluye redireccion automatica de ``%USERPROFILE%`` a ``Users\Default``.
 * Los archivos redirigidos al perfil Default reciben una ACL de plantilla sin el SID del usuario capturador.
 * Inyectar el archivo ``.reg`` **despues** de desplegar el ``.wim`` y ejecutar las acciones ``afterWimBeforeRegistry`` cuando exista ``Actions_*.json``.
-* La captura WIM se supervisa en un proceso de trabajo. Como WIMGAPI no entrega un porcentaje continuo fiable, DeltaPack muestra tiempo transcurrido, bytes escritos y un latido de consola cada minuto en vez de dejar una barra congelada en 0%.
+* La captura WIM se supervisa en un proceso de trabajo. Como WIMGAPI no entrega un porcentaje continuo fiable, DeltaPack muestra tiempo transcurrido, bytes escritos y un latido de consola cada minuto.
 * El escaneo de archivos usa: $($manifestObj.scan.hashThresholdLabel); paralelismo efectivo: $effectiveParallelism.
 * En modo SafeUSN, el snapshot inicial conserva SHA256 completo. El final reutiliza ese hash solo cuando volumen, diario, ID de archivo y USN siguen estables; cualquier falta de soporte o cambio de diario activa SHA256 completo automaticamente.
 * Diagnostico automatico del escaneo: $($scanDiagnostic.status) ($($scanDiagnostic.warnCount) advertencia(s), $($scanDiagnostic.infoCount) observacion(es)).
