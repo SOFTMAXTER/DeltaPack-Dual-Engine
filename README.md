@@ -63,7 +63,6 @@ Usa la misma cuenta local con privilegios de Administrador antes y después de u
 * `allowManagedRuntimeUpdates`: actívalo únicamente cuando el instalador deba incluir intencionalmente Edge/WebView2. Por defecto una migración masiva sigue siendo bloqueante.
 * `allowAuditOnlyDeletions`: por defecto es `false`. Solo debe activarse cuando se acepta deliberadamente que el inyector no aplique las entradas accionables de `Deletions_*.json`. La evidencia `filesystemAuditOnly` y `registryAuditOnly` nunca requiere activar esta opción.
 * `includeBundledOneDrive`: por defecto es `false`; separa OneDrive cuando Office u otro instalador lo actualiza incidentalmente. Actívalo únicamente si OneDrive forma parte intencional del paquete.
-* `actionAwareInjector`: por defecto es `false`. Actívalo únicamente cuando el inyector pueda consumir `Actions_*.json` schema 2; de lo contrario el WIM puede generarse, pero `packageReady` permanece en `false` si hay catálogos/controladores especializados.
 * `fileScanMaxAttempts`: número de intentos de lectura directa antes del rescate; el valor predeterminado es `3`.
 * `fileScanRetryDelayMs`: espera incremental entre intentos; el valor predeterminado es `200` ms.
 * `useVssScanFallback`: por defecto es `true`. Permite verificar desde VSS cualquier archivo del volumen del sistema que siga inestable después de los reintentos.
